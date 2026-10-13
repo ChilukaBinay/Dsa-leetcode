@@ -12,16 +12,9 @@ class Solution {
             }else{
                 s = mid +1;
             }
-            ans = mid;
+            
         }
-        if(ans == 0 & nums[ans]>target ){
-            return 0;
-        }
-        if(nums[ans] >target){
-            return ans;
-        }else{
-            return ans+1;
-        }
+       return s;
         
     }
 }
