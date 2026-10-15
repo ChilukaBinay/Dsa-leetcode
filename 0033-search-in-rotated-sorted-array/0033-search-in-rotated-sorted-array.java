@@ -1,65 +1,53 @@
 class Solution {
-    static int pivotIndex(int []nums) {
-       int n = nums.length;
-        int startPoint = 0;
-        int endPoint = n - 1;
-        int ans = -1;
-
-        if (nums[startPoint] <= nums[endPoint]) {
-            return -1;
-        }
-
-        while (startPoint <= endPoint) {
-            int mid = startPoint + (endPoint - startPoint) / 2;
-
-            // Compare against nums[0] (fixed reference) instead of nums[endPoint]
-            if (nums[mid] >= nums[0]) {
-                ans = mid;
-                startPoint = mid + 1;
-            } else {
-                endPoint = mid - 1;
-            }
-        }
-        return ans;
-    }
-
-     static int binarySearch(int[] nums, int startPoint, int endPoint, int target) {
+    static int findPivotIndex(int[] nums){
+        int s= 0;
         int n = nums.length;
-        while (startPoint <= endPoint) {
-            int mid = startPoint + (endPoint - startPoint) / 2;
-            if (nums[mid] == target) {
-                return mid;
+        int e= n - 1;
+        
+        while(s<e){
+            int mid = s + (e -s)/2;
+            if(nums[mid]>nums[e]){
+                s=mid+1;
+
+            }else{
+                e= mid;
             }
-            if (nums[mid] > target) {
-                endPoint = mid - 1;
-            } else {
-                startPoint = mid + 1;
+        }
+       return s;
+    }
+    static int binarySearch(int [] nums,int s,int e, int target){
+        while(s<=e){
+            int mid = s + (e - s)/2;
+            if(nums[mid]==target){
+             return mid;
+            }else if(nums[mid]>target){
+                e = mid-1;
+            }else{
+                s= mid+1;
             }
         }
         return -1;
-    };
-
+    }
     public int search(int[] nums, int target) {
- int pivotIndex = pivotIndex(nums);
         int n = nums.length;
+        if(n == 0 ){
+            return -1;
 
-        if ((pivotIndex == -1)) {
-            int ans = binarySearch(nums, 0, n - 1, target);
-            return ans;
-        } else {
-            int startArray1 = 0;
-            int endArray1 = pivotIndex;
-
-            int startArray2 = pivotIndex + 1;
-            int endArray2 = n - 1;
-            if (target >= nums[startArray1] && target <= nums[endArray1]) {
-                int ans = binarySearch(nums, startArray1, endArray1, target);
-                return ans;
-            }else{
-                int ans = binarySearch(nums, startArray2, endArray2, target);
-                return ans;
-            }
         }
-        
+        if (n == 1) {
+            return nums[0] == target ? 0 : -1;
+        }
+        int pivotIndex = findPivotIndex(nums);
+        if (pivotIndex == 0) {
+            return binarySearch(nums, 0, n - 1, target);
+        }
+        int s = 0;
+        int pivotIndexNext = pivotIndex-1 ;
+        int e = n-1;
+        if(target >= nums[s] && target <=nums[pivotIndexNext]){
+           return binarySearch(nums,s,pivotIndexNext,target);
+        }else{
+            return binarySearch(nums,pivotIndex,e,target);
+        }
     }
 }
